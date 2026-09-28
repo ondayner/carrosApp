@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title id="admin-site-title">Cargando Panel...</title>
+    <!-- Tailwind CSS v4 CDN -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <!-- CSS Global -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="min-h-screen flex flex-col antialiased bg-main text-main">
+
+    <!-- Contenedor del Navbar -->
+    <div id="nav-container" class="w-full z-50"></div>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow">
+        
+        <!-- Encabezado del Panel -->
+        <div class="flex flex-col items-center text-center md:text-left md:items-start md:flex-row md:justify-between gap-4 mb-6">
+            <div>
+                <span class="text-accent text-xs font-bold uppercase tracking-widest block mb-1">Gestión de Inventario</span>
+                <h1 class="text-2xl font-extrabold text-main tracking-tight">Panel de Administración</h1>
+                <p class="text-xs text-muted mt-0.5">Agrega, edita y gestiona las ofertas financieras de los vehículos.</p>
+            </div>
+            <div class="flex items-center gap-2.5 flex-wrap justify-center">
+                <button id="open-options-modal-btn" class="px-3.5 py-2 rounded-xl border border-theme text-main hover:bg-[var(--border-color)] font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 bg-surface">
+                    <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                    </svg>
+                    Listas Maestras
+                </button>
+                <button id="open-users-modal-btn" class="px-3.5 py-2 rounded-xl border border-theme text-main hover:bg-[var(--border-color)] font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 bg-surface">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    Usuarios
+                </button>
+                <button id="open-create-modal-btn" class="px-4 py-2 rounded-xl bg-[var(--bg-main)] hover:bg-[var(--accent-hover)] border-1 border-[var(--accent)] text-[var(--text-main)] font-bold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Agregar Vehículo
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabla de Inventario -->
+        <div class="bg-surface border border-theme rounded-2xl overflow-hidden shadow-sm">
+            <div class="overflow-x-auto w-full">
+                <table class="w-full min-w-[640px] text-left text-sm border-collapse">
+                    <thead class="bg-surface-hover border-b border-theme text-[11px] font-bold uppercase text-muted">
+                        <tr>
+                            <th class="p-3 text-left w-2/5">Vehículo</th>
+                            <th class="p-3 text-center w-1/6">Año / Condición</th>
+                            <th class="p-3 text-center w-1/6">Precio (USD)</th>
+                            <th class="p-3 text-center w-1/4">Modalidad de Pago</th>
+                            <th class="p-3 text-center w-1/6">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-cars-table-body" class="divide-y divide-[var(--border-color)]">
+                        <tr>
+                            <td colspan="5" class="p-6 text-center text-muted">Cargando inventario desde Supabase...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal Compacto para Vehículos -->
+    <div id="car-modal" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 hidden flex items-center justify-center p-3">
+        <div class="bg-surface border border-theme rounded-2xl max-w-lg w-full p-5 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            
+            <button id="close-modal-btn" type="button" class="absolute top-3 right-3 text-muted hover:text-main text-lg font-bold cursor-pointer z-10">&times;</button>
+            <h2 id="modal-title" class="text-lg font-extrabold text-main mb-4">Agregar Nuevo Vehículo</h2>
+
+            <form id="car-form" class="space-y-3" novalidate>
+                <input type="hidden" id="car-id" value="">
+
+                <!-- Grid Marca, Modelo, Año -->
+                <div class="grid grid-cols-3 gap-2.5">
+                    <div>
+                        <label for="form-brand" class="block text-[11px] font-bold text-muted mb-1">Marca *</label>
+                        <div class="custom-select-wrapper">
+                            <input type="text" id="form-brand" placeholder="Chevrolet" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-lg bg-surface border border-theme text-main text-xs focus:outline-none focus:border-[var(--accent)] hover:bg-[var(--bg-surface-hover)] transition-colors">
+                            <div class="custom-select-dropdown hidden" id="dropdown-form-brand"></div>
+                        </div>
+                        <span id="info-brand-new" class="text-[9px] text-amber-500 font-semibold mt-1 block leading-tight hidden">✨ Nueva marca (se agregará a listas maestras)</span>
+                        <span id="error-form-brand" class="text-[9px] text-red-500 font-semibold mt-1 block leading-tight hidden">Completa este campo</span>
+                    </div>
+
+                    <div>
+                        <label for="form-model" class="block text-[11px] font-bold text-muted mb-1">Modelo *</label>
+                        <div class="custom-select-wrapper">
+                            <input type="text" id="form-model" placeholder="Aveo" autocomplete="off" class="w-full px-2.5 py-1.5 rounded-lg bg-surface border border-theme text-main text-xs focus:outline-none focus:border-[var(--accent)] hover:bg-[var(--bg-surface-hover)] transition-colors">
+                            <div class="custom-select-dropdown hidden" id="dropdown-form-model"></div>
+                        </div>
+                        <span id="info-model-new" class="text-[9px] text-amber-500 font-semibold mt-1 block leading-tight hidden">✨ Nuevo modelo (se agregará a listas maestras)</span>
+                        <span id="error-form-model" class="text-[9px] text-red-500 font-semibold mt-1 block leading-tight hidden">Completa este campo</span>
+                    </div>
+
+                    <div>
+                        <label for="form-year" class="block text-[11px] font-bold text-muted mb-1">Año *</label>
+                        <input type="number" id="form-year" placeholder="2012" class="w-full px-2.5 py-1.5 rounded-lg bg-surface border border-theme text-main text-xs focus:outline-none focus:border-[var(--accent)] hover:bg-[var(--bg-surface-hover)]">
+                        <span id="error-form-year" class="text-[9px] text-red-500 font-semibold mt-1 block leading-tight hidden">Año no válido</span>
+                    </div>
+                </div>
+
+                <!-- Grid Condición y Precio -->
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="block text-[11px] font-bold text-muted mb-1">Condición *</label>
+                        <div class="custom-select-wrapper">
+                            <input type="hidden" id="form-condition" value="Usado">
+                            <div class="custom-select-trigger" id="trigger-form-condition">
+                                <span>Usado</span>
+                                <svg class="w-3.5 h-3.5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="custom-select-dropdown hidden" id="dropdown-form-condition">
+                                <div class="custom-select-option selected" data-value="Usado">Usado</div>
+                                <div class="custom-select-option" data-value="Nuevo">Nuevo</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="form-price" class="block text-[11px] font-bold text-muted mb-1">Precio ($ USD) *</label>
+                        <input type="number" id="form-price" step="0.01" placeholder="4500" class="w-full px-2.5 py-1.5 rounded-lg bg-surface border border-theme text-main text-xs focus:outline-none focus:border-[var(--accent)] hover:bg-[var(--bg-surface-hover)]">
+                        <span id="error-form-price" class="text-[9px] text-red-500 font-semibold mt-1 block leading-tight hidden">Ingresa un precio válido</span>
+                    </div>
+                </div>
+
+                <!-- Modalidad Financiera Multi-Plan -->
+                <div class="p-3 rounded-xl bg-surface-hover border border-theme space-y-2.5">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="text-[10px] font-bold text-accent uppercase tracking-wider block">Modalidades de Pago</span>
+                        <div class="w-32">
+                            <div class="custom-select-wrapper">
+                                <input type="hidden" id="form-payment-type" value="unico">
+                                <div class="custom-select-trigger" id="trigger-form-payment-type">
+                                    <span>Único</span>
+                                    <svg class="w-3.5 h-3.5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                                <div class="custom-select-dropdown hidden" id="dropdown-form-payment-type">
+                                    <div class="custom-select-option selected" data-value="unico">Único</div>
+                                    <div class="custom-select-option" data-value="cuotas">Cuotas</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="financing-plans-section" class="hidden space-y-2 pt-2 border-t border-theme">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[11px] font-bold text-muted">Planes Habilitados</span>
+                            <button type="button" id="add-plan-btn" class="px-2.5 py-1 text-[10px] font-bold rounded-lg border border-theme bg-surface hover:bg-[var(--bg-surface-hover)] text-accent cursor-pointer transition-all">
+                                + Añadir Plan
+                            </button>
+                        </div>
+                        <div id="plans-list-container" class="space-y-2 overflow-visible"></div>
+                    </div>
+                </div>
+
+                <!-- Imagen Principal y Galería Secundarias -->
+                <div class="space-y-3">
+                    
+                    <!-- Imagen Principal (Portada) -->
+                    <div>
+                        <label class="block text-[11px] font-bold text-muted mb-1">Imagen Principal (Portada) *</label>
+                        <div class="p-3 rounded-xl bg-surface-hover border border-theme space-y-2">
+                            <div class="flex items-center gap-3">
+                                <img id="form-image-preview" src="" alt="Preview" class="w-12 h-12 rounded-lg object-cover border border-theme hidden flex-shrink-0">
+                                <div class="flex-grow">
+                                    <label for="form-image-file" class="block text-[10px] font-bold text-accent uppercase tracking-wider mb-0.5">Subir foto principal</label>
+                                    <input type="file" id="form-image-file" accept="image/*" class="w-full text-xs text-muted file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-[11px] file:font-bold file:bg-surface file:border file:border-theme file:text-main hover:file:bg-surface-hover file:cursor-pointer transition-all">
+                                    <span id="image-file-info" class="text-[9px] text-muted block mt-0.5">Sube la foto de portada.</span>
+                                </div>
+                            </div>
+
+                            <div class="relative flex py-1 items-center">
+                                <div class="flex-grow border-t border-theme"></div>
+                                <span class="flex-shrink mx-2 text-[9px] font-bold text-muted uppercase">o bien pegue un enlace</span>
+                                <div class="flex-grow border-t border-theme"></div>
+                            </div>
+
+                            <input type="url" id="form-image-url" placeholder="https://ejemplo.com/imagen.jpg" class="w-full px-2.5 py-1.5 rounded-lg bg-surface border border-theme text-main text-xs focus:outline-none focus:border-[var(--accent)] hover:bg-[var(--bg-surface-hover)]">
+                        </div>
+                        <span id="error-form-image" class="text-[9px] text-red-500 font-semibold mt-1 block leading-tight hidden">Selecciona la imagen principal</span>
+                    </div>
+
+                    <!-- Galería de Fotos Adicionales -->
+                    <div>
+                        <label class="block text-[11px] font-bold text-muted mb-1">Galería de Fotos Adicionales <span class="text-[9px] font-normal italic text-muted">(Opcional)</span></label>
+                        <div class="p-3 rounded-xl bg-surface-hover border border-theme space-y-2">
+                            <input type="file" id="form-gallery-files" accept="image/*" multiple class="w-full text-xs text-muted file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-[11px] file:font-bold file:bg-surface file:border file:border-theme file:text-main hover:file:bg-surface-hover file:cursor-pointer transition-all">
+                            <span id="gallery-files-info" class="text-[9px] text-muted block">Puedes seleccionar varias fotos secundarias a la vez.</span>
+                            
+                            <!-- Miniaturas de la Galería -->
+                            <div id="gallery-previews-container" class="flex items-center gap-1.5 flex-wrap pt-1 hidden"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Descripción (Campo Opcional) -->
+                <div>
+                    <label for="form-description" class="block text-[11px] font-bold text-muted mb-1">Descripción <span class="text-[9px] font-normal italic text-muted">(Opcional)</span></label>
+                    <textarea id="form-description" rows="2" placeholder="Detalles generales..." class="w-full px-2.5 py-1.5 rounded-lg bg-surface border border-theme text-main text-xs focus:outline-none focus:border-[var(--accent)] hover:bg-[var(--bg-surface-hover)]"></textarea>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="flex justify-end gap-2 pt-3 border-t border-theme">
+                    <button type="button" id="cancel-modal-btn" class="px-3 py-1.5 text-xs font-bold rounded-lg border border-theme text-muted hover:text-main hover:bg-[var(--bg-surface-hover)] transition-all cursor-pointer">Cancelar</button>
+                    <button type="submit" id="submit-car-form-btn" class="px-4 py-1.5 text-xs font-bold rounded-lg bg-[var(--bg-main)] hover:bg-[var(--accent-hover)] border-1 border-[var(--accent)] text-[var(--text-main)] shadow-md transition-all cursor-pointer">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Administrar Listas Maestras -->
+    <div id="options-modal" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 hidden flex items-center justify-center p-3">
+        <div class="bg-surface border border-theme rounded-2xl max-w-lg w-full p-5 relative shadow-2xl max-h-[85vh] flex flex-col">
+            
+            <button id="close-options-modal-btn" class="absolute top-3 right-3 text-muted hover:text-main text-lg font-bold cursor-pointer">&times;</button>
+
+            <h2 class="text-lg font-extrabold text-main mb-1">Administración de Opciones</h2>
+            <p class="text-xs text-muted mb-4">Crea o elimina marcas, modelos y frecuencias maestras.</p>
+
+            <form id="add-option-form" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-4 p-2.5 bg-surface-hover border border-theme rounded-xl">
+                <div class="w-full sm:w-36 custom-select-wrapper">
+                    <input type="hidden" id="new-option-type" value="brand">
+                    <div class="custom-select-trigger" id="trigger-new-option-type">
+                        <span>Marca</span>
+                        <svg class="w-3.5 h-3.5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="custom-select-dropdown hidden" id="dropdown-new-option-type">
+                        <div class="custom-select-option selected" data-value="brand">Marca</div>
+                        <div class="custom-select-option" data-value="model">Modelo</div>
+                        <div class="custom-select-option" data-value="frequency">Frecuencia</div>
+                    </div>
+                </div>
+
+                <input type="text" id="new-option-value" required placeholder="Nombre (ej. Mazda)" autocomplete="off" class="flex-grow px-2.5 py-1.5 rounded-lg bg-surface border border-theme text-main text-xs focus:outline-none focus:border-[var(--accent)] hover:bg-[var(--bg-surface-hover)]">
+
+                <button type="submit" class="w-full sm:w-auto px-3.5 py-1.5 text-xs font-bold rounded-lg bg-[var(--bg-main)] hover:bg-[var(--accent-hover)] border-1 border-[var(--accent)] text-[var(--text-main)] transition-all cursor-pointer whitespace-nowrap text-center">
+                    + Añadir
+                </button>
+            </form>
+
+            <div class="bg-surface border border-theme rounded-xl overflow-hidden shadow-xs flex-grow overflow-y-auto w-full modal-table-container">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-surface-hover border-b border-theme font-bold uppercase text-muted sticky top-0">
+                        <tr>
+                            <th class="p-2.5 text-left">Tipo</th>
+                            <th class="p-2.5 text-left">Valor</th>
+                            <th class="p-2.5 text-right">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-options-table-body" class="divide-y divide-[var(--border-color)]">
+                        <tr>
+                            <td colspan="3" class="p-4 text-center text-muted">Cargando listas maestras...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-end pt-4">
+                <button type="button" id="done-options-modal-btn" class="px-4 py-1.5 text-xs font-bold rounded-lg bg-[var(--bg-main)] hover:bg-[var(--accent-hover)] border-1 border-[var(--accent)] text-[var(--text-main)] transition-all cursor-pointer">Listo</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal Compacto para Usuarios -->
+    <div id="users-modal" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 hidden flex items-center justify-center p-2 sm:p-4">
+        <div class="bg-surface border border-theme rounded-2xl max-w-xl p-3 sm:p-5 relative shadow-2xl max-h-[92vh] flex flex-col">
+            <button id="close-users-modal-btn" class="absolute top-3 right-3 text-muted hover:text-main text-lg font-bold cursor-pointer z-20">&times;</button>
+            <h2 class="text-base sm:text-lg font-extrabold text-main mb-0.5">Gestión de Usuarios</h2>
+            <p class="text-[11px] sm:text-xs text-muted mb-3">Administra los roles o elimina registros de perfiles.</p>
+
+            <div class="bg-surface border border-theme rounded-xl overflow-y-auto overflow-x-auto shadow-xs flex-grow w-full max-h-[55vh] sm:max-h-[60vh]">
+                <table class="w-full min-w-[340px] text-left text-xs">
+                    <thead class="bg-surface-hover border-b border-theme font-bold uppercase text-muted sticky top-0 z-10">
+                        <tr>
+                            <th class="p-2 sm:p-2.5 text-left">Usuario / ID</th>
+                            <th class="p-2 sm:p-2.5 text-center">Rol</th>
+                            <th class="p-2 sm:p-2.5 text-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-users-table-body" class="divide-y divide-[var(--border-color)]">
+                        <tr><td colspan="3" class="p-4 text-center text-muted">Cargando usuarios...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-end pt-3 mt-2 border-t border-theme">
+                <button type="button" id="done-users-modal-btn" class="px-4 py-1.5 text-xs font-bold rounded-lg bg-[var(--bg-main)] hover:bg-[var(--accent-hover)] border-1 border-[var(--accent)] text-[var(--text-main)] transition-all cursor-pointer">Listo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor del Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Script del Admin -->
+    <script type="module" src="../js/admin/admin.js"></script>
+
+    <!-- Título Dinámico -->
+    <script type="module">
+        import { companyConfig } from '../js/config/company.js';
+        const titleEl = document.getElementById('admin-site-title');
+        if (titleEl) {
+            titleEl.innerText = `${companyConfig.name} - Admin Panel`;
+        }
+    </script>
+</body>
+</html>

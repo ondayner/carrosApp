@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title id="site-title">Cargando..</title>
+    <!-- Tailwind CSS v4 CDN -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <!-- CSS Global -->
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body class="min-h-screen flex flex-col antialiased bg-main text-main">
+
+    <!-- Contenedor del Navbar -->
+    <div id="nav-container" class="w-full z-50"></div>
+
+    <!-- Contenedor del Hero -->
+    <div id="hero-container"></div>
+
+    <!-- Sección del Catálogo -->
+    <main id="catalogo" class="max-w-6xl mx-auto px-4 py-16 w-full flex-1">
+        
+        <div class="text-center mb-10">
+            <h4 class="text-[var(--accent)] text-xs font-bold tracking-[0.25em] uppercase mb-3">Catálogo</h4>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-main">Vehículos Disponibles</h2>
+        </div>
+
+        <!-- Sección de Filtros en Catálogo -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            
+            <!-- Filtro Marca -->
+            <div>
+                <label class="block text-xs font-bold text-muted mb-1.5">Marca</label>
+                <div class="custom-select-wrapper">
+                    <input type="text" id="filter-brand" placeholder="Todos" autocomplete="off" class="w-full px-3 py-2 rounded-xl bg-surface border border-theme text-main text-xs focus:outline-none focus:border-[var(--accent)] hover:bg-[var(--bg-surface-hover)] transition-colors">
+                    <div class="custom-select-dropdown hidden" id="dropdown-filter-brand"></div>
+                </div>
+            </div>
+
+            <!-- Filtro Modelo -->
+            <div>
+                <label class="block text-xs font-bold text-muted mb-1.5">Modelo</label>
+                <div class="custom-select-wrapper">
+                    <input type="text" id="filter-model" placeholder="Todos" autocomplete="off" class="w-full px-3 py-2 rounded-xl bg-surface border border-theme text-main text-xs focus:outline-none focus:border-[var(--accent)] hover:bg-[var(--bg-surface-hover)] transition-colors">
+                    <div class="custom-select-dropdown hidden" id="dropdown-filter-model"></div>
+                </div>
+            </div>
+
+            <!-- Filtro Año -->
+            <div>
+                <label class="block text-xs font-bold text-muted mb-1.5">Año</label>
+                <div class="custom-select-wrapper">
+                    <input type="text" id="filter-year" placeholder="Todos" autocomplete="off" class="w-full px-3 py-2 rounded-xl bg-surface border border-theme text-main text-xs focus:outline-none focus:border-[var(--accent)] hover:bg-[var(--bg-surface-hover)] transition-colors">
+                    <div class="custom-select-dropdown hidden" id="dropdown-filter-year"></div>
+                </div>
+            </div>
+
+            <!-- Filtro Condición -->
+            <div>
+                <label class="block text-xs font-bold text-muted mb-1.5">Condición</label>
+                <div class="custom-select-wrapper">
+                    <input type="hidden" id="filter-condition" value="">
+                    <div class="custom-select-trigger" id="trigger-filter-condition">
+                        <span>Todos</span>
+                        <svg class="w-3.5 h-3.5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="custom-select-dropdown hidden" id="dropdown-filter-condition">
+                        <div class="custom-select-option selected" data-value="">Todos</div>
+                        <div class="custom-select-option" data-value="Usado">Usado</div>
+                        <div class="custom-select-option" data-value="Nuevo">Nuevo</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Grid de Vehículos -->
+        <div id="cars-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+
+        <!-- Mensaje sin resultados -->
+        <div id="no-results" class="hidden text-center text-muted py-10 w-full col-span-full">
+            No se encontraron vehículos con esos filtros.
+        </div>
+
+    </main>
+
+    <!-- Contenedor del Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Script Principal de la Aplicación -->
+    <script type="module" src="./js/app.js"></script>
+
+    <!-- Título Dinámico -->
+    <script type="module">
+        import { companyConfig } from './js/config/company.js';
+        const titleEl = document.getElementById('site-title');
+        if (titleEl) {
+            titleEl.innerText = `${companyConfig.name} - Principal`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos y Políticas de Privacidad</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Importamos directamente el CSS del proyecto con las variables adaptativas light-dark() -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 sm:p-8 max-w-4xl mx-auto bg-main text-main transition-colors">
+    
+    <!-- ENCABEZADO DINÁMICO -->
+    <header class="pb-6 border-b border-theme flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div id="company-logo-badge" class="w-10 h-10 rounded-xl bg-accent flex items-center justify-center font-black text-white text-lg shadow-md flex-shrink-0">
+                CV
+            </div>
+            <div>
+                <h1 id="company-name-title" class="font-extrabold text-base tracking-tight text-main leading-tight">Carros venta</h1>
+                <span class="text-[10px] text-muted uppercase tracking-wider font-semibold block">MARCO LEGAL Y POLÍTICAS</span>
+            </div>
+        </div>
+        <a href="../index.html" class="text-xs text-accent hover:underline font-bold transition-all">&larr; Volver al catálogo</a>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL DE LEYES Y PRIVACIDAD -->
+    <main class="py-8 space-y-8 text-xs text-muted leading-relaxed">
+        
+        <!-- TÉRMINOS Y CONDICIONES DE USO -->
+        <section class="bg-surface p-6 rounded-2xl border border-theme space-y-3 shadow-md">
+            <h2 class="text-base font-extrabold text-main border-b border-theme pb-2">1. Términos y Condiciones de Uso</h2>
+            <p><strong class="text-main">1.1 Generalidades y Aceptación:</strong> El acceso y uso de esta plataforma implica la aceptación de las condiciones de compra, reserva y consulta de vehículos expuestas por <span class="company-name-inline font-bold text-main">Carros venta</span>.</p>
+            <p><strong class="text-main">1.2 Precios y Tasa Oficial:</strong> Todos los precios expresados en Dólares Estadounidenses (USD) son montos base referenciales. Los montos calculados o liquidados en moneda nacional (Bolívares) se determinan automáticamente con base en la tasa oficial publicada por el Banco Central de Venezuela (BCV) en la fecha correspondiente a la operación.</p>
+            <p><strong class="text-main">1.3 Veracidad de Pagos y Comprobantes:</strong> El usuario se compromete a adjuntar únicamente comprobantes de pago reales y verificables (Pago Móvil, Binance Pay, transferencias o depósitos en efectivo). La alteración de capturas de pantalla o números de referencia conllevará la anulación inmediata de las solicitudes de crédito o la suspensión de la cuenta.</p>
+            <p><strong class="text-main">1.4 Planes de Financiamiento:</strong> La postulación a una compra a cuotas no implica aprobación automática. El crédito está sujeto a evaluación previa de datos personales y confirmación por parte del equipo administrativo.</p>
+        </section>
+
+        <!-- POLÍTICAS DE PRIVACIDAD Y PROTECCIÓN DE DATOS -->
+        <section class="bg-surface p-6 rounded-2xl border border-theme space-y-3 shadow-md">
+            <h2 class="text-base font-extrabold text-main border-b border-theme pb-2">2. Políticas de Privacidad y Tratamiento de Información Personal</h2>
+            <p><strong class="text-main">2.1 Datos Personales Recopilados:</strong> Para ofrecer la gestión de créditos e historial de pagos, nuestra plataforma solicita y procesa la siguiente información:</p>
+            <ul class="list-disc pl-5 space-y-1 text-muted">
+                <li>Nombres, apellidos y dirección de correo electrónico de contacto.</li>
+                <li>Fotografía de perfil y datos de autenticación provistos por el inicio de sesión con Google (Google OAuth) o correo.</li>
+                <li>Números de identificación (Cédula/Pasaporte) y teléfonos de contacto para formalización de expedientes.</li>
+                <li>Datos de referencias y comprobantes de transacciones de pago (números de referencia, banco de origen, montos).</li>
+            </ul>
+
+            <p><strong class="text-main">2.2 Almacenamiento Seguro e Infraestructura Cifrada:</strong> Toda tu información personal, claves cifradas e historial de cuotas se almacenan y gestionan de forma segura mediante la infraestructura de <strong class="text-main">Supabase</strong> con reglas de seguridad por nivel de fila (Row Level Security - RLS). Tus datos no salen de la base de datos ni son expuestos públicamente en el catálogo.</p>
+
+            <p><strong class="text-main">2.3 Uso Exclusivo e Inalienabilidad:</strong> <span class="company-name-inline font-bold text-main">Carros venta</span> garantiza que la información personal recopilada es estrictamente para la gestión interna de créditos, generación de tablas de cuotas y notificaciones de cobranza. Tus datos <strong class="text-main">jamás serán vendidos, comercializados ni cedidos a terceros</strong> para campañas ni fines publicitarios.</p>
+
+            <p><strong class="text-main">2.4 Notificaciones Operativas:</strong> Al registrarte, aceptas recibir alertas en tiempo real dentro de la aplicación y correos electrónicos automáticos referentes al estado de verificación de tus pagos, vencimiento de cuotas e información administrativa.</p>
+        </section>
+
+        <!-- INFORMACIÓN DE CONTACTO LEGAL -->
+        <section class="bg-surface p-4 rounded-xl border border-theme space-y-1">
+            <h3 class="text-xs font-bold text-main">Dudas o Solicitudes sobre tus Datos</h3>
+            <p>Si deseas corregir, actualizar o solicitar la eliminación de tu expediente de nuestra base de datos, comunícate con nuestro equipo al correo <a id="company-email-link" href="#" class="text-accent underline font-semibold"></a> o a nuestra dirección física en <span id="company-address-text" class="text-main font-semibold"></span>.</p>
+        </section>
+
+    </main>
+
+    <!-- PIE DE PÁGINA CON CRÉDITOS -->
+    <footer class="pt-6 border-t border-theme text-center text-[11px] text-muted flex flex-col sm:flex-row items-center justify-between gap-2">
+        <p>&copy; <span id="copyright-year"></span> <span class="company-name-inline">Carros venta</span>. Todos los derechos reservados.</p>
+        <p class="flex items-center gap-1 font-medium">
+            Desarrollado por 
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="font-extrabold text-main hover:text-accent transition-colors underline decoration-amber-500/40">
+                OndarDev
+            </a>
+        </p>
+    </footer>
+
+    <!-- EXTRACCIÓN DINÁMICA DESDE company.js -->
+    <script type="module">
+        import { companyConfig } from '../js/config/company.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.title = `Términos y Políticas | ${companyConfig.name}`;
+            
+            const logoBadge = document.getElementById('company-logo-badge');
+            if (logoBadge) logoBadge.textContent = companyConfig.logoLetter || 'CV';
+
+            const nameTitle = document.getElementById('company-name-title');
+            if (nameTitle) nameTitle.textContent = companyConfig.name;
+
+            document.querySelectorAll('.company-name-inline').forEach(el => {
+                el.textContent = companyConfig.name;
+            });
+
+            const emailLink = document.getElementById('company-email-link');
+            if (emailLink) {
+                emailLink.href = `mailto:${companyConfig.email}`;
+                emailLink.textContent = companyConfig.email;
+            }
+
+            const addressText = document.getElementById('company-address-text');
+            if (addressText) addressText.textContent = companyConfig.address;
+
+            const yearSpan = document.getElementById('copyright-year');
+            if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+        });
+    </script>
+</body>
+</html>
